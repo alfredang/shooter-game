@@ -134,15 +134,17 @@ function update() {
     enemies = enemies.filter(e => {
         e.y += e.speed;
         
-        // Bullet collision
-        bullets = bullets.filter(b => {
-            if (Math.abs(b.x - (e.x + 15)) < 20 && Math.abs(b.y - (e.y + 15)) < 20) {
+        // Bullet collision - check all bullets
+        for (let i = bullets.length - 1; i >= 0; i--) {
+            let b = bullets[i];
+            // Simple box collision
+            if (b.x > e.x && b.x < e.x + 30 && b.y > e.y && b.y < e.y + 30) {
                 score += 100;
                 scoreEl.textContent = `Score: ${score}`;
+                bullets.splice(i, 1);
                 return false;
             }
-            return true;
-        });
+        }
 
         // Player collision
         if (Math.abs(player.x + 20 - (e.x + 15)) < 30 && Math.abs(player.y + 20 - (e.y + 15)) < 30) {
