@@ -26,13 +26,10 @@ for (let i = 0; i < 50; i++) {
 }
 
 function drawPlayer() {
-    // Paw ship
     ctx.fillStyle = '#ff6b6b';
-    // Main body
     ctx.beginPath();
     ctx.ellipse(player.x + 20, player.y + 25, 18, 22, 0, 0, Math.PI * 2);
     ctx.fill();
-    // Ears
     ctx.beginPath();
     ctx.moveTo(player.x + 8, player.y + 15);
     ctx.lineTo(player.x + 5, player.y);
@@ -43,7 +40,6 @@ function drawPlayer() {
     ctx.lineTo(player.x + 35, player.y);
     ctx.lineTo(player.x + 25, player.y + 12);
     ctx.fill();
-    // Eyes
     ctx.fillStyle = '#fff';
     ctx.beginPath();
     ctx.arc(player.x + 12, player.y + 20, 5, 0, Math.PI * 2);
@@ -64,18 +60,15 @@ function drawBullet(b) {
 }
 
 function drawEnemy(e) {
-    // Alien body
     ctx.fillStyle = '#7fff00';
     ctx.beginPath();
     ctx.arc(e.x + 15, e.y + 15, 20, 0, Math.PI * 2);
     ctx.fill();
-    // Eyes
     ctx.fillStyle = '#000';
     ctx.beginPath();
     ctx.arc(e.x + 8, e.y + 12, 5, 0, Math.PI * 2);
     ctx.arc(e.x + 22, e.y + 12, 5, 0, Math.PI * 2);
     ctx.fill();
-    // Antenna
     ctx.strokeStyle = '#7fff00';
     ctx.lineWidth = 3;
     ctx.beginPath();
@@ -111,61 +104,39 @@ function update() {
     if (keys['ArrowUp'] && player.y > 0) player.y -= player.speed;
     if (keys['ArrowDown'] && player.y < canvas.height - player.height) player.y += player.speed;
 
-    // Move bullets up
+    // Move bullets
     for (let i = bullets.length - 1; i >= 0; i--) {
         bullets[i].y -= 10;
-        if (bullets[i].y < 0) {
-            bullets.splice(i, 1);
-        }
+        if (bullets[i].y < 0) bullets.splice(i, 1);
     }
 
     // Spawn enemies
     if (Math.random() < 0.03) {
-        enemies.push({
-            x: Math.random() * (canvas.width - 40),
-            y: -30,
-            speed: Math.random() * 2 + 1
-        });
+        enemies.push({ x: Math.random() * 340, y: -30, speed: Math.random() * 2 + 1 });
     }
 
-    // Move enemies and check collisions
+    // Move enemies
     for (let i = enemies.length - 1; i >= 0; i--) {
-        let e = enemies[i];
-        e.y += e.speed;
+        enemies[i].y += enemies[i].speed;
         
-        // Check bullet collisions
+        // Simple collision - check every bullet against this enemy
         for (let j = bullets.length - 1; j >= 0; j--) {
             let b = bullets[j];
-            // Simple distance-based collision
-            let dx = b.x - (e.x + 15);
-            let dy = b.y - (e.y + 15);
-            let distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance < 25) {
-                // Hit!
+            let e = enemies[i];
+            // Bullet center vs enemy center
+            let dist = Math.sqrt((b.x - e.x - 15) ** 2 + (b.y - e.y - 15) ** 2);
+            if (dist < 30) {
                 score += 100;
-                scoreEl.textContent = 'Score: ' + score;
+                scoreEl.innerText = 'Score: ' + score;
                 enemies.splice(i, 1);
                 bullets.splice(j, 1);
                 break;
             }
         }
         
-        // Check if enemy passed bottom
-        if (e.y > canvas.height + 30) {
+        // Remove if off screen
+        if (enemies[i] && enemies[i].y > canvas.height + 30) {
             enemies.splice(i, 1);
-            continue;
-        }
-        
-        // Check player collision
-        if (e.y + 15 > player.y && e.x + 15 > player.x && e.x < player.x + player.width) {
-            lives--;
-            livesEl.textContent = '❤️'.repeat(lives);
-            enemies.splice(i, 1);
-            if (lives <= 0) {
-                gameOver = true;
-                document.getElementById('instructions').textContent = 'Game Over! Score: ' + score + '. Press Space to restart.';
-            }
         }
     }
 
@@ -176,7 +147,6 @@ function update() {
 function draw() {
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
     drawStars();
     drawPlayer();
     bullets.forEach(drawBullet);
@@ -203,13 +173,12 @@ document.addEventListener('keydown', e => {
         enemies = [];
         player.x = 180;
         player.y = 420;
-        scoreEl.textContent = 'Score: 0';
-        livesEl.textContent = '❤️❤️❤️';
-        document.getElementById('instructions').textContent = 'Arrow keys to move, Space to shoot!';
+        scoreEl.innerText = 'Score: 0';
+        livesEl.innerText = '❤️❤️❤️';
+        document.getElementById('instructions').innerText = 'Arrow keys to move, Space to shoot!';
         update();
     }
     if (e.key === ' ' && gameRunning && !gameOver) {
-        // Shoot from center of player
         bullets.push({ x: player.x + 20, y: player.y });
     }
     if (e.key === ' ' && gameOver) {
@@ -221,9 +190,9 @@ document.addEventListener('keydown', e => {
         enemies = [];
         player.x = 180;
         player.y = 420;
-        scoreEl.textContent = 'Score: 0';
-        livesEl.textContent = '❤️❤️❤️';
-        document.getElementById('instructions').textContent = 'Arrow keys to move, Space to shoot!';
+        scoreEl.innerText = 'Score: 0';
+        livesEl.innerText = '❤️❤️❤️';
+        document.getElementById('instructions').innerText = 'Arrow keys to move, Space to shoot!';
         update();
     }
 });
