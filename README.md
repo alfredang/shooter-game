@@ -2,7 +2,7 @@
 
 A top-down space shooter built with HTML5 Canvas. Pilot a cat ship through a starfield, blast aliens, and survive as long as you can.
 
-**Play now:** [alfredang.github.io/shooter-game](https://alfredang.github.io/shooter-game/)
+**Play now:** [alfredang.github.io/space-paw-shooter](https://alfredang.github.io/space-paw-shooter/)
 
 ## How to Play
 
