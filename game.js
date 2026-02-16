@@ -59,35 +59,31 @@ function drawPlayer() {
 function drawBullet(b) {
     ctx.fillStyle = '#00ffff';
     ctx.beginPath();
-    ctx.arc(b.x, b.y, 5, 0, Math.PI * 2);
+    ctx.arc(b.x, b.y, 8, 0, Math.PI * 2);
     ctx.fill();
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = '#00ffff';
-    ctx.fill();
-    ctx.shadowBlur = 0;
 }
 
 function drawEnemy(e) {
-    // Alien
+    // Alien body
     ctx.fillStyle = '#7fff00';
     ctx.beginPath();
-    ctx.arc(e.x + 15, e.y + 15, 15, 0, Math.PI * 2);
+    ctx.arc(e.x + 15, e.y + 15, 20, 0, Math.PI * 2);
     ctx.fill();
     // Eyes
     ctx.fillStyle = '#000';
     ctx.beginPath();
-    ctx.arc(e.x + 10, e.y + 12, 4, 0, Math.PI * 2);
-    ctx.arc(e.x + 20, e.y + 12, 4, 0, Math.PI * 2);
+    ctx.arc(e.x + 8, e.y + 12, 5, 0, Math.PI * 2);
+    ctx.arc(e.x + 22, e.y + 12, 5, 0, Math.PI * 2);
     ctx.fill();
     // Antenna
     ctx.strokeStyle = '#7fff00';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.moveTo(e.x + 15, e.y);
-    ctx.lineTo(e.x + 15, e.y - 8);
+    ctx.moveTo(e.x + 15, e.y - 5);
+    ctx.lineTo(e.x + 15, e.y - 15);
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(e.x + 15, e.y - 10, 3, 0, Math.PI * 2);
+    ctx.arc(e.x + 15, e.y - 18, 4, 0, Math.PI * 2);
     ctx.fill();
 }
 
@@ -115,50 +111,63 @@ function update() {
     if (keys['ArrowUp'] && player.y > 0) player.y -= player.speed;
     if (keys['ArrowDown'] && player.y < canvas.height - player.height) player.y += player.speed;
 
-    // Move bullets
-    bullets = bullets.filter(b => {
-        b.y -= 7;
-        return b.y > 0;
-    });
+    // Move bullets up
+    for (let i = bullets.length - 1; i >= 0; i--) {
+        bullets[i].y -= 10;
+        if (bullets[i].y < 0) {
+            bullets.splice(i, 1);
+        }
+    }
 
     // Spawn enemies
-    if (Math.random() < 0.02) {
+    if (Math.random() < 0.03) {
         enemies.push({
-            x: Math.random() * (canvas.width - 30),
+            x: Math.random() * (canvas.width - 40),
             y: -30,
             speed: Math.random() * 2 + 1
         });
     }
 
-    // Move enemies
-    enemies = enemies.filter(e => {
+    // Move enemies and check collisions
+    for (let i = enemies.length - 1; i >= 0; i--) {
+        let e = enemies[i];
         e.y += e.speed;
         
-        // Bullet collision - check all bullets (larger hitbox)
-        for (let i = bullets.length - 1; i >= 0; i--) {
-            let b = bullets[i];
-            // Larger collision area
-            if (Math.abs(b.x - (e.x + 15)) < 25 && Math.abs(b.y - (e.y + 15)) < 25) {
+        // Check bullet collisions
+        for (let j = bullets.length - 1; j >= 0; j--) {
+            let b = bullets[j];
+            // Simple distance-based collision
+            let dx = b.x - (e.x + 15);
+            let dy = b.y - (e.y + 15);
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 25) {
+                // Hit!
                 score += 100;
-                scoreEl.textContent = `Score: ${score}`;
-                bullets.splice(i, 1);
-                return false;
+                scoreEl.textContent = 'Score: ' + score;
+                enemies.splice(i, 1);
+                bullets.splice(j, 1);
+                break;
             }
         }
-
-        // Player collision
-        if (Math.abs(player.x + 20 - (e.x + 15)) < 30 && Math.abs(player.y + 20 - (e.y + 15)) < 30) {
+        
+        // Check if enemy passed bottom
+        if (e.y > canvas.height + 30) {
+            enemies.splice(i, 1);
+            continue;
+        }
+        
+        // Check player collision
+        if (e.y + 15 > player.y && e.x + 15 > player.x && e.x < player.x + player.width) {
             lives--;
             livesEl.textContent = '❤️'.repeat(lives);
+            enemies.splice(i, 1);
             if (lives <= 0) {
                 gameOver = true;
-                document.getElementById('instructions').textContent = `Game Over! Score: ${score}. Press Space to restart.`;
+                document.getElementById('instructions').textContent = 'Game Over! Score: ' + score + '. Press Space to restart.';
             }
-            return false;
         }
-
-        return e.y < canvas.height + 30;
-    });
+    }
 
     draw();
     requestAnimationFrame(update);
@@ -200,7 +209,8 @@ document.addEventListener('keydown', e => {
         update();
     }
     if (e.key === ' ' && gameRunning && !gameOver) {
-        bullets.push({ x: player.x + 18, y: player.y });
+        // Shoot from center of player
+        bullets.push({ x: player.x + 20, y: player.y });
     }
     if (e.key === ' ' && gameOver) {
         gameRunning = true;
