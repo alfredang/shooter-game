@@ -1,20 +1,32 @@
-# Space Paw
+# Space Paw Shooter
 
-A browser-based reflex game where you click a bouncing paw as it flies across a starfield. Each hit scores points and makes the paw faster — how long can you keep up?
+A top-down space shooter built with HTML5 Canvas. Pilot a cat ship through a starfield, blast aliens, and survive as long as you can.
+
+**Play now:** [alfredang.github.io/shooter-game](https://alfredang.github.io/shooter-game/)
 
 ## How to Play
 
-1. Open `index.html` in any modern browser
-2. Click anywhere on the canvas to start
-3. Click the bouncing paw to score points
-4. The paw speeds up with every hit
+1. Press **Space** to start
+2. Use **Arrow Keys** to move your ship
+3. Press **Space** to shoot
+4. Destroy aliens to earn points (+100 each)
+5. Avoid collisions — you have 3 lives
 
 ## Controls
 
 | Action | Input |
 |--------|-------|
-| Start game | Click the canvas |
-| Score points | Click the paw |
+| Move | Arrow Keys |
+| Shoot | Space |
+| Start / Restart | Space |
+
+## Features
+
+- Cat-shaped player ship with ears and eyes
+- Green alien enemies with antennas
+- Scrolling starfield background
+- Increasing difficulty as enemies spawn randomly
+- 3-life system with game over and restart
 
 ## Tech Stack
 
@@ -26,8 +38,9 @@ A browser-based reflex game where you click a bouncing paw as it flies across a 
 
 ```
 ├── index.html   # Entry point
-├── game.js      # Game loop, rendering, and input handling
-└── style.css    # Layout and styling
+├── game.js      # Game loop, rendering, collision, and input
+├── style.css    # Layout and styling
+└── .github/workflows/deploy-pages.yml  # GitHub Pages CI/CD
 ```
 
 ## Running Locally
