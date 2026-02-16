@@ -15,7 +15,7 @@ let stars = [];
 
 const keys = {};
 
-// Create stars background
+// Create stars
 for (let i = 0; i < 50; i++) {
     stars.push({
         x: Math.random() * canvas.width,
@@ -55,7 +55,7 @@ function drawPlayer() {
 function drawBullet(b) {
     ctx.fillStyle = '#00ffff';
     ctx.beginPath();
-    ctx.arc(b.x, b.y, 8, 0, Math.PI * 2);
+    ctx.arc(b.x, b.y, 10, 0, Math.PI * 2);
     ctx.fill();
 }
 
@@ -104,10 +104,41 @@ function update() {
     if (keys['ArrowUp'] && player.y > 0) player.y -= player.speed;
     if (keys['ArrowDown'] && player.y < canvas.height - player.height) player.y += player.speed;
 
-    // Move bullets
+    // Move bullets - store previous positions for better collision
     for (let i = bullets.length - 1; i >= 0; i--) {
-        bullets[i].y -= 10;
-        if (bullets[i].y < 0) bullets.splice(i, 1);
+        let prevY = bullets[i].y;
+        bullets[i].y -= 12;
+        
+        // Remove if off screen
+        if (bullets[i].y < -10) {
+            bullets.splice(i, 1);
+            continue;
+        }
+        
+        // Check collision with ALL enemies
+        for (let j = enemies.length - 1; j >= 0; j--) {
+            let e = enemies[j];
+            let b = bullets[i];
+            
+            // Very generous collision detection
+            // Check if bullet is inside enemy circle (radius 20)
+            let dx = b.x - (e.x + 15);
+            let dy = b.y - (e.y + 15);
+            let dist = Math.sqrt(dx * dx + dy * dy);
+            
+            // Also check previous position (for fast bullets)
+            let prevDy = prevY - (e.y + 15);
+            let prevDist = Math.sqrt(dx * dx + prevDy * prevDy);
+            
+            if (dist < 35 || prevDist < 35) {
+                // Hit!
+                score += 100;
+                scoreEl.innerText = 'Score: ' + score;
+                enemies.splice(j, 1);
+                bullets.splice(i, 1);
+                break;
+            }
+        }
     }
 
     // Spawn enemies
@@ -119,23 +150,8 @@ function update() {
     for (let i = enemies.length - 1; i >= 0; i--) {
         enemies[i].y += enemies[i].speed;
         
-        // Simple collision - check every bullet against this enemy
-        for (let j = bullets.length - 1; j >= 0; j--) {
-            let b = bullets[j];
-            let e = enemies[i];
-            // Bullet center vs enemy center
-            let dist = Math.sqrt((b.x - e.x - 15) ** 2 + (b.y - e.y - 15) ** 2);
-            if (dist < 30) {
-                score += 100;
-                scoreEl.innerText = 'Score: ' + score;
-                enemies.splice(i, 1);
-                bullets.splice(j, 1);
-                break;
-            }
-        }
-        
         // Remove if off screen
-        if (enemies[i] && enemies[i].y > canvas.height + 30) {
+        if (enemies[i].y > canvas.height + 30) {
             enemies.splice(i, 1);
         }
     }
