@@ -1,56 +1,140 @@
-# Space Paw Shooter
+<div align="center">
 
-A top-down space shooter built with HTML5 Canvas. Pilot a cat ship through a starfield, blast aliens, and survive as long as you can.
+# Space Paw Shooter 🚀🐾
 
-**Play now:** [alfredang.github.io/space-paw-shooter](https://alfredang.github.io/space-paw-shooter/)
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-327FC7?style=for-the-badge&logo=github&logoColor=white)](https://pages.github.com)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+**A top-down space shooter game built with HTML5 Canvas**
+
+[Play Now](https://alfredang.github.io/space-paw-shooter) · [Report Bug](https://github.com/alfredang/space-paw-shooter/issues) · [Request Feature](https://github.com/alfredang/space-paw-shooter/issues)
+
+</div>
+
+## About
+
+Space Paw Shooter is a fun arcade-style game where you pilot a cat-shaped spaceship through a cosmic battlefield. Destroy alien invaders, survive as long as you can, and aim for the high score!
+
+### Key Features
+
+- 🐾 Cute cat-shaped player ship
+- 👾 Alien enemies with animated movements
+- ⭐ Scrolling starfield background
+- 🔫 Laser shooting with sound effects
+- 💥 Explosion sounds on hits
+- ❤️ 3-life survival system
+- 🎮 Progressive difficulty
 
 ## How to Play
 
-1. Press **Space** to start
+1. Press **Space** to start the game
 2. Use **Arrow Keys** to move your ship
-3. Press **Space** to shoot
+3. Press **Space** to shoot lasers
 4. Destroy aliens to earn points (+100 each)
-5. Avoid collisions — you have 3 lives
+5. Avoid collisions with aliens
+6. Game over when all 3 lives are lost
 
 ## Controls
 
 | Action | Input |
 |--------|-------|
-| Move | Arrow Keys |
+| Start Game | Space |
+| Move Ship | Arrow Keys (Up/Down/Left/Right) |
 | Shoot | Space |
-| Start / Restart | Space |
-
-## Features
-
-- Cat-shaped player ship with ears and eyes
-- Green alien enemies with antennas
-- Scrolling starfield background
-- Increasing difficulty as enemies spawn randomly
-- 3-life system with game over and restart
+| Restart | Space (after game over) |
 
 ## Tech Stack
 
-- HTML5 Canvas
-- Vanilla JavaScript
-- CSS3
+| Category | Technology |
+|----------|------------|
+| Frontend | HTML5, CSS3, JavaScript |
+| Graphics | HTML5 Canvas |
+| Audio | Web Audio API |
+| Deployment | GitHub Pages |
+| Workflow | GitHub Actions |
 
 ## Project Structure
 
 ```
-├── index.html   # Entry point
-├── game.js      # Game loop, rendering, collision, and input
-├── style.css    # Layout and styling
-└── .github/workflows/deploy-pages.yml  # GitHub Pages CI/CD
+space-paw-shooter/
+├── index.html          # Main game HTML
+├── game.js             # Game logic & rendering
+├── style.css           # Game styling
+├── README.md           # This file
+└── .github/
+    └── workflows/
+        └── deploy.yml  # GitHub Actions deployment
 ```
 
-## Running Locally
+## Getting Started
 
-No build step required. Open `index.html` directly in a browser, or serve it with any static file server:
+### Prerequisites
 
+- A modern web browser (Chrome, Firefox, Safari, Edge)
+- Git installed on your machine
+
+### Installation
+
+1. Clone the repository:
 ```bash
+git clone https://github.com/alfredang/space-paw-shooter.git
+cd space-paw-shooter
+```
+
+2. Open `index.html` in your browser:
+```bash
+# On macOS
+open index.html
+
+# On Linux
+xdg-open index.html
+
+# On Windows
+start index.html
+```
+
+Or simply double-click the `index.html` file.
+
+### Running a Local Server
+
+For the best experience, run a local server:
+```bash
+# Using Python
+python -m http.server 8000
+
+# Using Node.js
 npx serve .
 ```
 
+Then open http://localhost:8000 in your browser.
+
+## Deployment
+
+The game is automatically deployed to GitHub Pages using GitHub Actions.
+
+To deploy manually:
+1. Push changes to the `main` branch
+2. GitHub Actions will automatically build and deploy
+3. Visit https://alfredang.github.io/space-paw-shooter
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+Made with ❤️ by [Alfred Ang](https://github.com/alfredang)
+
+</div>
