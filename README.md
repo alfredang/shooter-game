@@ -169,4 +169,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Made with ❤️ by [Alfred Ang](https://github.com/alfredang)
 
+Co-created by [Openclaw](https://openclaw.com)
+
 </div>
